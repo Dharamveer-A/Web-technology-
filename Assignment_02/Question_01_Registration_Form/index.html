@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Admission Portal - KPRIET</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Header Section -->
+  <header>
+    <div class="header-container">
+      <div class="college-info">
+        <h1>KPR Institute of Engineering and Technology</h1>
+        <p>Autonomous Institution &bull; Affiliated to Anna University &bull; Coimbatore</p>
+      </div>
+      <div class="portal-badge">Admission Portal 2026-27</div>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="wrapper">
+    <div class="form-card">
+      <div class="form-title">
+        <h2>Student Registration Form</h2>
+        <p>Complete the application below with verified academic credentials and documents.</p>
+      </div>
+
+      <!-- Alert Box for Error / Success Messages -->
+      <div id="alertBox" class="alert-box"></div>
+
+      <form id="registrationForm" onsubmit="return validateForm(event)" novalidate>
+        
+        <!-- Section 1: Personal & Academic Details -->
+        <fieldset>
+          <legend>Academic & Personal Details</legend>
+          <div class="row">
+            <div class="form-group">
+              <label for="fullName">Full Name <span class="required">*</span></label>
+              <input type="text" id="fullName" placeholder="e.g. Dharamveer A" required>
+              <small class="error-text" id="nameError"></small>
+            </div>
+            <div class="form-group">
+              <label for="rollNo">Roll Number / App No <span class="required">*</span></label>
+              <input type="text" id="rollNo" placeholder="e.g. 24CS048" required>
+              <small class="error-text" id="rollError"></small>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="form-group">
+              <label for="email">Institutional / Personal Email <span class="required">*</span></label>
+              <input type="email" id="email" placeholder="student@example.com" required>
+              <small class="error-text" id="emailError"></small>
+            </div>
+            <div class="form-group">
+              <label for="course">Admitted Degree & Branch <span class="required">*</span></label>
+              <select id="course" required>
+                <option value="">-- Select Course / Department --</option>
+                <option value="B.E. Computer Science and Engineering">B.E. Computer Science and Engineering</option>
+                <option value="B.Tech Artificial Intelligence and Data Science">B.Tech Artificial Intelligence and Data Science</option>
+                <option value="B.E. Electronics and Communication Engineering">B.E. Electronics and Communication Engineering</option>
+                <option value="B.Tech Information Technology">B.Tech Information Technology</option>
+                <option value="B.E. Mechanical Engineering">B.E. Mechanical Engineering</option>
+              </select>
+              <small class="error-text" id="courseError"></small>
+            </div>
+          </div>
+        </fieldset>
+
+        <!-- Section 2: Security & Password Setup -->
+        <fieldset>
+          <legend>Account Security Setup</legend>
+          <div class="row">
+            <div class="form-group">
+              <label for="password">Create Password <span class="required">*</span></label>
+              <input type="password" id="password" placeholder="At least 8 chars, 1 uppercase, 1 digit, 1 special symbol" oninput="checkPasswordStrength()" required>
+              <!-- Real-time Password Strength Meter -->
+              <div class="strength-meter-container">
+                <div class="strength-bar" id="strengthBar"></div>
+              </div>
+              <small class="strength-text" id="strengthText">Password Strength: None</small>
+              <small class="error-text" id="passwordError"></small>
+            </div>
+            <div class="form-group">
+              <label for="confirmPassword">Confirm Password <span class="required">*</span></label>
+              <input type="password" id="confirmPassword" placeholder="Re-enter password" oninput="checkPasswordMatch()" required>
+              <small class="error-text" id="confirmPasswordError"></small>
+            </div>
+          </div>
+        </fieldset>
+
+        <!-- Section 3: Document & Photo Upload -->
+        <fieldset>
+          <legend>Document & Identity Uploads</legend>
+          <div class="row">
+            <div class="form-group">
+              <label for="profileImage">Profile Photograph <span class="required">*</span></label>
+              <input type="file" id="profileImage" accept="image/jpeg,image/png" onchange="validateFile('profileImage', 2, ['image/jpeg', 'image/png'], 'profileError')" required>
+              <small class="hint-text">Formats: JPG, PNG | Max Size: 2 MB</small>
+              <small class="error-text" id="profileError"></small>
+            </div>
+            <div class="form-group">
+              <label for="idProof">ID Proof / 12th Certificate <span class="required">*</span></label>
+              <input type="file" id="idProof" accept="application/pdf,image/jpeg,image/png" onchange="validateFile('idProof', 5, ['application/pdf', 'image/jpeg', 'image/png'], 'idProofError')" required>
+              <small class="hint-text">Formats: PDF, JPG, PNG | Max Size: 5 MB</small>
+              <small class="error-text" id="idProofError"></small>
+            </div>
+          </div>
+        </fieldset>
+
+        <!-- Agreement Checkbox -->
+        <div class="terms-container">
+          <label>
+            <input type="checkbox" id="termsCheck" required>
+            I hereby certify that all information submitted is true and verifiable by the academic registrar.
+          </label>
+          <small class="error-text" id="termsError"></small>
+        </div>
+
+        <!-- Buttons -->
+        <div class="btn-group">
+          <button type="submit" class="btn btn-primary">Complete Registration</button>
+          <button type="reset" class="btn btn-secondary" onclick="resetValidation()">Clear Form</button>
+        </div>
+      </form>
+
+      <!-- Registration Success Summary Preview Card -->
+      <div id="summaryCard" class="summary-card">
+        <h3>&check; Registration Completed Successfully!</h3>
+        <p>A confirmation email has been dispatched to your registered address.</p>
+        <div class="summary-grid">
+          <div><span>Candidate Name:</span> <strong id="resName"></strong></div>
+          <div><span>Roll Number:</span> <strong id="resRoll"></strong></div>
+          <div><span>Email ID:</span> <strong id="resEmail"></strong></div>
+          <div><span>Department:</span> <strong id="resCourse"></strong></div>
+          <div><span>Uploaded Photo:</span> <strong id="resPhoto"></strong></div>
+          <div><span>Uploaded ID Proof:</span> <strong id="resDoc"></strong></div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <p>&copy; 2026-2027 KPR Institute of Engineering and Technology | Department of Computer Science & Engineering</p>
+    <p>Course: U21CS501 Web Technology &bull; Assignment 02</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
